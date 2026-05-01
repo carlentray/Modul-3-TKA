@@ -37,8 +37,8 @@ Menggunakan 2 node:
 ### 1. Clone Repository
 
 ```
-git clone https://github.com/USERNAME/REPO-NAME.git
-cd REPO-NAME
+git clone https://github.com/carlentray/Modul-3-TKA.git
+cd Modul-3-TKA
 ```
 
 ### 2. Setup 2 VM Ubuntu

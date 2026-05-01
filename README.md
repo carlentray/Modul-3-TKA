@@ -20,13 +20,15 @@ Menggunakan 2 node:
 ---
 
 ## 📁 Struktur Project
+```
 .
 ├── inventory.yml
 ├── playbook.yml
 └── roles/
-└── docker/
-└── tasks/
-└── main.yml
+    └── docker/
+        └── tasks/
+            └── main.yml
+```
 
 ---
 

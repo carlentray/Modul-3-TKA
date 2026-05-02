@@ -1,7 +1,22 @@
-- name: Install Docker
+---
+- name: Install dependencies untuk Docker
   apt:
-    name: docker.io
+    name:
+      - apt-transport-https
+      - ca-certificates
+      - curl
+      - gnupg
+      - lsb-release
     state: present
+    update_cache: yes
+
+- name: Install Docker Engine dan Compose Plugin
+  apt:
+    name:
+      - docker.io
+      - docker-compose-v2  # Ini yang paling penting untuk memperbaiki error tadi
+    state: present
+    update_cache: yes
 
 - name: Start Docker
   systemd:
@@ -17,7 +32,7 @@
 - name: Allow SSH
   ufw:
     rule: allow
-    port: 22
+    name: OpenSSH
 
 - name: Enable UFW
   ufw:

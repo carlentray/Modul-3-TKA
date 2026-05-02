@@ -3,8 +3,9 @@ all:
     backend:
       hosts:
         node_backend:
-          ansible_host: 192.168.7.30
-          ansible_user: ubuntu
+          ansible_host: 192.168.1.12
+          ansible_user: vboxuser
+          ansible_ssh_private_key_file: ~/.ssh/id_rsa
 
     frontend:
       hosts:

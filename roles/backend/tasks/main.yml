@@ -1,0 +1,54 @@
+# lokasi: roles/backend/tasks/main.yml
+---
+- name: Buka port backend di Firewall (UFW)
+  community.general.ufw:
+    rule: allow
+    port: "{{ backend_port }}"
+    proto: tcp
+
+- name: Buat direktori project di server target
+  ansible.builtin.file:
+    path: /opt/backend_app
+    state: directory
+    mode: '0755'
+
+- name: Copy source code dan Dockerfile ke server target
+  ansible.builtin.copy:
+    src: app/
+    dest: /opt/backend_app/
+    mode: '0644'
+
+- name: Generate .env dari Jinja2 template
+  ansible.builtin.template:
+    src: .env.j2
+    dest: /opt/backend_app/.env
+
+- name: Generate docker-compose.yml dari Jinja2 template
+  ansible.builtin.template:
+    src: docker-compose.yml.j2
+    dest: /opt/backend_app/docker-compose.yml
+
+- name: Nyalakan service menggunakan Docker Compose
+  community.docker.docker_compose_v2:
+    project_src: /opt/backend_app
+    state: present
+    build: always
+
+- name: Tunggu beberapa detik agar service backend dan DB siap
+  ansible.builtin.pause:
+    seconds: 10
+
+- name: Health check backend menggunakan URI module
+  ansible.builtin.uri:
+    url: "http://localhost:{{ backend_port }}/"
+    method: GET
+    return_content: yes
+    status_code: 200
+  register: health_check_result
+  retries: 3
+  delay: 5
+  until: health_check_result.status == 200
+
+- name: Tampilkan hasil Health Check
+  ansible.builtin.debug:
+    msg: "Health Check Response: {{ health_check_result.json.message }}"

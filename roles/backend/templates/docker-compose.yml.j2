@@ -1,0 +1,35 @@
+version: '3.8'
+
+services:
+  postgres_db:
+    image: postgres:15-alpine
+    environment:
+      POSTGRES_USER: {{ db_username }}
+      POSTGRES_PASSWORD: {{ db_password }}
+      POSTGRES_DB: {{ db_name }}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    networks:
+      - backend-network
+    restart: unless-stopped
+
+  backend_app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "{{ backend_port }}:{{ backend_port }}"
+    env_file:
+      - .env
+    depends_on:
+      - postgres_db
+    networks:
+      - backend-network
+    restart: unless-stopped
+
+volumes:
+  pgdata:
+
+networks:
+  backend-network:
+    driver: bridge

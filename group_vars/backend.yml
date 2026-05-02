@@ -1,0 +1,5 @@
+db_name: "tka_db"
+db_username: "tka_user"
+db_password: "supersecretpassword"
+backend_port: 3000
+jwt_secret: "vibe_coded_secret_key"

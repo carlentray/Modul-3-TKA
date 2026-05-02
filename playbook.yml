@@ -5,3 +5,12 @@
 
   roles:
     - docker
+
+
+  
+- name: Deploy Backend Stack
+  hosts: backend
+  become: yes
+  roles:
+    - backend
+
